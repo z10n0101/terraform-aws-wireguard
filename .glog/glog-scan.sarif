@@ -1,0 +1,89 @@
+{
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "Glog.AI",
+          "organization": "Glog.AI",
+          "fullName": "Glog, Making software more secure",
+          "version": "1.0.0",
+          "semanticVersion": "1.0.0",
+          "informationUri": "https://www.glog.ai",
+          "rules": [
+            {
+              "id": "bf10429f-726f-330d-a48d-8551cabe02d8",
+              "name": "\"EFS File System Utilizing AWS-Managed Encryption Key Instead of Customer-Managed KMS Key Vulnerability\"",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe \"EFS File System Utilizing AWS-Managed Encryption Key Instead of Customer-Managed KMS Key Vulnerability\" in Terraform refers to the situation where the Elastic File System (EFS) in AWS is configured to use the default AWS-managed encryption key instead of a customer-managed Key Management Service (KMS) key. \n\nThis is a security concern because the default AWS-managed keys do not provide the same level of control and auditability as customer-managed keys. With customer-managed keys, you have full control over the key policies and rotation, and you can audit the use of the key more effectively. If an attacker gains access to your AWS account, they may be able to use the default AWS-managed keys to decrypt your data.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, you should always use customer-managed KMS keys for EFS encryption. This allows you to maintain control over the key policies and rotation, and to audit the use of the key.\n\n## Source Code Fix Recommendation\n\nHere is a simple fix for the vulnerability in your Terraform code:\n\n```hcl\nresource \"aws_kms_key\" \"mykey\" {\n  description = \"My customer-managed KMS key\"\n  deletion_window_in_days = 7\n}\n\nresource \"aws_efs_file_system\" \"myefs\" {\n  kms_key_id = aws_kms_key.mykey.arn\n}\n```\n\nIn this code, a new customer-managed KMS key is created and then used for the EFS file system.\n\n## Library Dependencies\n\nThe code example requires the following Terraform providers:\n\n- `aws`: This provider is used to interact with the many resources supported by AWS.\n\nYou can install it by adding the following to your Terraform configuration:\n\n```hcl\nterraform {\n  required_providers {\n    aws = {\n      source  = \"hashicorp/aws\"\n      version = \"~> 3.0\"\n    }\n  }\n}\n```\n\n## References\n\n- [OWASP - Insecure Cloud Use](https://owasp.org/www-project-top-ten/2017/A6_2017-Security_Misconfiguration.html)\n- [CWE-250: Execution with Unnecessary Privileges](https://cwe.mitre.org/data/definitions/250.html)"
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-250",
+                    "url": "https://cwe.mitre.org/data/definitions/250.html"
+                  }
+                ],
+                "severity": "MEDIUM",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-250"
+                ]
+              }
+            }
+          ],
+          "language": "en-US",
+          "contents": [
+            "localizedData",
+            "nonLocalizedData"
+          ],
+          "isComprehensive": false
+        }
+      },
+      "language": "en-US",
+      "results": [
+        {
+          "ruleId": "bf10429f-726f-330d-a48d-8551cabe02d8",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "\"EFS File System Utilizing AWS-Managed Encryption Key Instead of Customer-Managed KMS Key Vulnerability\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "efs.tf",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 5,
+                  "startColumn": 3,
+                  "endLine": 5,
+                  "endColumn": 20,
+                  "snippet": {
+                    "text": "  kms_key_id = null #default"
+                  }
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "4850aaab10e7f6db813f7ea57820990f4af242d6519263342d7d20dcfb73449f",
+            "glog-pfp-ruleFileCode/v1": "caaa60da94da51bbfa8133e3378ef2dc2ff7ea2551d531bc878de046b812b8c9"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "caaa60da94da51bbfa8133e3378ef2dc2ff7ea2551d531bc878de046b812b8c9"
+          },
+          "properties": {}
+        }
+      ],
+      "newlineSequences": [
+        "\r\n",
+        "\n"
+      ]
+    }
+  ]
+}
